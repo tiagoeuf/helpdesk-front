@@ -6,45 +6,43 @@ import { ConnectableObservable } from "rxjs";
 import { Credenciais } from "src/app/models/credenciais";
 import { AuthService } from "src/app/services/auth.service";
 
-
 @Component({
   selector: "app-login",
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
 })
-
 export class LoginComponent implements OnInit {
-
   creds: Credenciais = {
-    email: '',
-    senha: ''
-  }
+    email: "",
+    senha: "",
+  };
 
   email = new FormControl(null, Validators.email);
   senha = new FormControl(null, Validators.minLength(3));
 
   constructor(
-    private toast: ToastrService, 
+    private toast: ToastrService,
     private service: AuthService,
-    private router: Router ) {}
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
   logar() {
-    
-    this.service.authenticate(this.creds).subscribe({next: resposta => {
-      this.service.successfulLogin(resposta.headers.get('Authorization').substring(7));
-      this.router.navigate(['']);
-    },
-   
-   error: () => {
-   this.toast.error('Usuário e/ou senha inválidos');
-    }
-  })}
-  
-
-  validaCampos(): boolean {
-    return this.email.valid && this.senha.valid
+    this.service.authenticate(this.creds).subscribe({
+      next: (resposta) => {
+        this.service.successfulLogin(
+          resposta.headers.get("Authorization").substring(7)
+        );
+        this.router.navigate([""]);
+      },
+      error: () => {
+        this.toast.error("Usuário e/ou senha inválidos");
+      },
+    });
   }
 
+  validaCampos(): boolean {
+    return this.email.valid && this.senha.valid;
+  }
 }
