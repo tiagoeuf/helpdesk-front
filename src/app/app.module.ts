@@ -30,6 +30,7 @@ import { TecnicoListComponent } from './components/tecnico/tecnico-list/tecnico-
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,7 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     ReactiveFormsModule,
     // Requisições http
-    //HttpClientModule,
+    HttpClientModule,
     // Angular Material
     MatFormFieldModule,
     MatPaginatorModule,
@@ -68,7 +69,8 @@ import { ToastrModule } from 'ngx-toastr';
     timeOut: 4000,
     closeButton: true,
     progressBar:true
-    })
+    }),
+    //NgxMaskModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
