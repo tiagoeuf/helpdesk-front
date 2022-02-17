@@ -17,16 +17,19 @@ export class AuthInterceptor implements HttpInterceptor {
     let token = localStorage.getItem('token');
 
     if(token) {
-      const cloneReq = request.clone({ headers: request.headers.set('Authorization', 'Bearer ${token)') });
+      const cloneReq = 
+      request.clone({ headers: request.headers.set('Authorization', `Bearer ${token}`) });
       return next.handle(cloneReq);
-    } return next.handle(request);
-
-    return next.handle(request);
+    } else { 
+      return next.handle(request);
+    }
   }
 }
 
-export const AuthInterceptorProvider = {
-  provide: HTTP_INTERCEPTORS,
-  useClass: AuthInterceptor,
-  multi: true
-}
+export const AuthInterceptorProvider = [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }
+]
