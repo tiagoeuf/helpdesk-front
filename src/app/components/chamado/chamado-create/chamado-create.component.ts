@@ -58,7 +58,7 @@ export class ChamadoCreateComponent implements OnInit {
       this.router.navigate(['chamados']);
     }), ex => {
       console.log(ex);
-      //this.toastService.error(ex.error.error);
+      this.toastService.error(ex.error.error);
     }
   }
 

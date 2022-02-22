@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { ForwardRefHandling } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_CONFIG } from '../config/api.config';
@@ -11,6 +12,9 @@ export class ChamadoService {
 
   constructor(private http: HttpClient) { }
 
+  findById(id: any): Observable<Chamado> {
+    return this.http.get<Chamado>(`${API_CONFIG.baseUrl}/chamado/${id}`);
+  }
 
   findAll(): Observable<Chamado[]> {
     return this.http.get<Chamado[]>(`${API_CONFIG.baseUrl}/chamado`);
@@ -18,5 +22,9 @@ export class ChamadoService {
 
   create(chamado: Chamado): Observable<Chamado> {
     return this.http.post<Chamado>(`${API_CONFIG.baseUrl}/chamado`, chamado);
+  }
+
+  update(chamado: Chamado): Observable<Chamado>{
+    return this.http.put<Chamado>(`${API_CONFIG.baseUrl}/chamado/${chamado.id}`, chamado)
   }
 }

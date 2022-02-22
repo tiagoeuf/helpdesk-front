@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 import { Chamado } from 'src/app/models/chamado';
 import { Cliente } from 'src/app/models/cliente';
 import { Tecnico } from 'src/app/models/tecnico';
@@ -45,20 +46,32 @@ export class ChamadoUpdateComponent implements OnInit {
     private tecnicoService: TecnicoService,
     private toastService: ToastrService,
     private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    this.chamado.id = this.route.snapshot.paramMap.get('id');
+    this.findById();
     this.findAllClientes();
     this.findAllTecnicos();
   }
 
-  create(): void {
-    this.chamadoService.create(this.chamado).subscribe(resposta => {
-      this.toastService.success('Chamado criado com sucesso', 'Novo Chamado');
+  findById():void {
+    this.chamadoService.findById(this.chamado.id).subscribe(resposta => {
+      this.chamado = resposta;
+    }), ex => {
+      console.log(ex);
+      this.toastService.error(ex.error.error);
+    }
+  }
+
+  update(): void {
+    this.chamadoService.update(this.chamado).subscribe(resposta => {
+      this.toastService.success('Chamado atualizado com sucesso', 'Atualizar Chamado');
       this.router.navigate(['chamados']);
     }), ex => {
       console.log(ex);
-      //this.toastService.error(ex.error.error);
+      this.toastService.error(ex.error.error);
     }
   }
 
@@ -77,6 +90,24 @@ export class ChamadoUpdateComponent implements OnInit {
 
   validaCampos(): boolean {
     return this.prioridade.valid && this.status.valid && this.titulo.valid && this.observacoes.valid && this.tecnico.valid && this.cliente.valid
+  }
+
+  retornaStatus(status: any): string {
+    if(status == '0') {
+      return 'ABERTO'
+    } else if(status == '1') {
+      return 'EM ANDAMENTO';
+    }
+    return 'ENCERRADO'
+  }
+
+  retornaPrioridade(prioridade: any): string {
+    if(prioridade == '0') {
+      return 'BAIXA'
+    } else if(prioridade == '1') {
+      return 'MEDIA';
+    }
+    return 'ALTA'
   }
 
 }
